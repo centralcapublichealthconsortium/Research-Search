@@ -45,8 +45,8 @@ function performSearch() {
   for (const key in keywordMap) {
     for (const term of searchTerms) {
       if (key.includes(term)) {
-        keywordMap[key].forEach(url => {
-          found.push({ keyword: key, url: url });
+        keywordMap[key].forEach(entry => {
+          found.push({ keyword: key, name: entry.name, url: entry.url });
         });
         break;
       }
@@ -60,7 +60,7 @@ function performSearch() {
 
   let html = "<ul>";
   found.forEach(item => {
-    html += `<li><span class="keyword">${item.keyword}</span>: <a href="${item.url}" target="_blank">${item.url}</a></li>`;
+    html += `<li><span class="keyword">${item.keyword}</span>: <a href="${item.url}" target="_blank">${item.name}</a></li>`;
   });
   html += "</ul>";
   resultsDiv.innerHTML = html;
