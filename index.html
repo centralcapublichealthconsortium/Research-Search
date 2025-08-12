@@ -14,6 +14,7 @@
   button:hover { background: #0056b3; }
   ul { list-style: none; padding: 0; }
   li { margin-bottom: 8px; }
+  .keyword { font-weight: bold; color: #333; }
 </style>
 </head>
 <body>
@@ -39,29 +40,27 @@ function performSearch() {
   }
 
   const searchTerms = query.split(/\s+/);
-  const foundLinks = new Set();
+  const found = [];
 
   for (const key in keywordMap) {
-    let match = true;
     for (const term of searchTerms) {
-      if (!key.includes(term)) {
-        match = false;
-        break;
+      if (key.includes(term)) {
+        keywordMap[key].forEach(url => {
+          found.push({ keyword: key, url: url });
+        });
+        break; // No need to check other terms for this keyword
       }
-    }
-    if (match) {
-      keywordMap[key].forEach(url => foundLinks.add(url));
     }
   }
 
-  if (foundLinks.size === 0) {
+  if (found.length === 0) {
     resultsDiv.innerHTML = "<p>No results found.</p>";
     return;
   }
 
   let html = "<ul>";
-  foundLinks.forEach(url => {
-    html += `<li><a href="${url}" target="_blank">${url}</a></li>`;
+  found.forEach(item => {
+    html += `<li><span class="keyword">${item.keyword}</span>: <a href="${item.url}" target="_blank">${item.url}</a></li>`;
   });
   html += "</ul>";
   resultsDiv.innerHTML = html;
